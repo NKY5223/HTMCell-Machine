@@ -1,0 +1,75 @@
+html {
+    height: 100%;
+}
+body {
+    background: #202020;
+    margin: 0;
+    height: 100%;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#cells {
+    --width: 10;
+    --height: 10;
+    --size: 50px;
+    --time: 200ms;
+
+    position: absolute;
+    width: calc(var(--width) * var(--size));
+    height: calc(var(--height) * var(--size));
+
+    image-rendering: pixelated;
+    background: url("./tex/BGDefault.png") repeat 0px 0px / var(--size);
+}
+
+.cell {
+    position: absolute;
+
+    left: calc(var(--size) / -2);
+    top: calc(var(--size) / -2);
+    width: var(--size);
+    height: var(--size);
+    
+    transform: translate(50%, 50%);
+    transition: transform var(--time) linear;
+    
+    background: url("./tex/unknown.png") 0px / var(--size);
+
+    text-align: center;
+    font: calc(var(--size) / 2) Consolas;
+    line-height: calc(var(--size) / 2);
+    color: white;
+    -webkit-text-stroke: 1px #808080;
+}
+
+.notrans {
+    transition: none !important;
+}
+
+.cell.mover {
+    background-image: url("./tex/mover.png");
+}
+.cell.push {
+    background-image: url("./tex/push.png");
+}
+.cell.trash {
+    background-image: url("./tex/trash.png");
+}
+.cell.enemy {
+    background-image: url("./tex/enemy.png");
+}
+.cell.immobile {
+    background-image: url("./tex/immobile.png");
+}
+.cell.slide {
+    background-image: url("./tex/slide.png");
+}
+.cell.rotator {
+    background-image: url("./tex/CWspinner_alt.png");
+}
+.cell.rotator_ccw {
+    background-image: url("./tex/CCWspinner_alt.png");
+}
