@@ -20,12 +20,6 @@ createBtn.addEventListener("click", e => {
     hide(menu);
     sys.createLevel(10, 4);
 
-    sys.rectCell(Mover, 0, 0, 0, 3, 0);
-    sys.addCell(Arrow, 1, 0, 0);
-    sys.addCell(Arrow, 1, 1, 1);
-    sys.addCell(Arrow, 1, 2, 2);
-    sys.addCell(Arrow, 1, 3, 3);
-
     show(cellsDiv);
     show(gui);
 });
