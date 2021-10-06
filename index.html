@@ -4,10 +4,40 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" type="text/css" href="style.css" />
+        <link rel="shortcut icon" href="tex/mover.png" type="image/x-icon">
         <title>HTMCell Machine</title>
     </head>
     <body>
-        <div id="cells"></div>
+        <div id="menu">
+            <div id="logo">
+                <img src="./tex/mover.png" />
+                <h1><span>HTM</span>Cell&nbsp;Machine</h1>
+                <small>inspired by Jell Machine</small>
+            </div>
+            <button class="button" id="create" title="Create a new level"><span>Create</span></button>
+        </div>
+        <div id="cells" class="hidden"></div>
+        <div id="gui" class="hidden">
+            <button class="button" id="play" title="Play">
+                <img id="playImg" src="./images/play.png" width="90" height="90" />
+                <img id="pauseImg" src="./images/pause.png" width="90" height="90" />
+            </button>
+            <button class="button" id="tick" title="Run a tick">
+                <img src="./images/tick.png" width="90" height="90" />
+            </button>
+            <div id="hotbar">
+                <div class="slot" data-slot="1"></div>
+                <div class="slot" data-slot="2"></div>
+                <div class="slot" data-slot="3"></div>
+                <div class="slot" data-slot="4"></div>
+                <div class="slot" data-slot="5"></div>
+                <div class="slot" data-slot="6"></div>
+                <div class="slot" data-slot="7"></div>
+                <div class="slot" data-slot="8"></div>
+                <div class="slot" data-slot="9"></div>
+                <div class="slot" data-slot="10"></div>
+            </div>
+        </div>
         
         <script src="cell.js"></script>
 
@@ -19,6 +49,9 @@
         <script src="cells/slide.js"></script>
         <script src="cells/rotator.js"></script>
         <script src="cells/rotator_ccw.js"></script>
+        <script src="cells/generator.js"></script>
+        <script src="cells/orientator.js"></script>
+        <script src="cells/arrow.js"></script>
 
         <script src="CellMachine.js"></script>
         <script src="index.js"></script>

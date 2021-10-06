@@ -4,10 +4,10 @@ class Mover extends Cell {
         this.element.classList.add(this.type = "mover");
     }
     update() {
-        let cell = this.cellAtRot((this.rot % 4 + 4) % 4);
+        let cell = this.cellAtRot(this.rot & 3);
         
         if (cell) {
-            let push = cell.push((this.rot % 4 + 4) % 4, 1);
+            let push = cell.push(this.rot & 3, 1);
             if (push === null) this.remove();
             else if (!push) return;
         }
@@ -15,9 +15,9 @@ class Mover extends Cell {
         this.move();
     }
     push(rot = 0, force = 1) {
-        if ((rot + 2) % 4 === this.rot && force < 2) return false;
+        if (((rot + 2) & 3) === this.rot && force < 2) return false;
 
-        rot = (rot % 4 + 4) % 4;
+        rot &= 3;
         switch (rot) {
             case 0:
                 if (this.x + 1 >= this.sys.w) return false;
@@ -40,7 +40,7 @@ class Mover extends Cell {
             return true;
         }
 
-        let push = cell.push(rot, force + (rot === this.rot) - ((rot + 2) % 4 === this.rot));
+        let push = cell.push(rot, force + (rot === this.rot) - (((rot + 2) & 3) === this.rot));
         
         if (push === null) {
             this.remove();

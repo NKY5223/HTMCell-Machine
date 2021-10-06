@@ -3,7 +3,7 @@ class Cell {
     constructor(x = 0, y = 0, rot = 0, sys) {
         this.x = x;
         this.y = y;
-        this.elRot = this.rot = (rot % 4 + 4) % 4;
+        this.elRot = this.rot = rot & 3;
         this.sys = sys;
 
         this.type = "unknown";
@@ -18,7 +18,7 @@ class Cell {
     push(rot = 0, force = 1) {
         if (force < 1) return false;
 
-        rot = (rot % 4 + 4) % 4;
+        rot &= 3;
         switch (rot) {
             case 0:
                 if (this.x + 1 >= this.sys.w) return false;
@@ -50,11 +50,11 @@ class Cell {
         return push;
     }
     cellAtRot(rot = 0) {
-        rot = (rot % 4 + 4) % 4;
+        rot &= 3;
         return this.sys.cellAt(this.x + (rot === 0) - (rot === 2), this.y + (rot === 3) - (rot === 1));
     }
     move(rot = this.rot) {
-        switch ((rot % 4 + 4) % 4) {
+        switch (rot & 3) {
             case 1:
                 if (this.y > 0) this.y--;
                 break;
@@ -70,10 +70,11 @@ class Cell {
         }
     }
     rotate(rot = 0) {
-        this.rot = ((this.rot + rot) % 4 + 4) % 4;
+        this.rot = (this.rot + rot) & 3;
         this.elRot += rot;
     }
     remove() {
+        if (!this.sys.cells.includes(this)) return;
         this.sys.cells.splice(this.sys.cells.indexOf(this), 1);
         this.element.remove();
     }

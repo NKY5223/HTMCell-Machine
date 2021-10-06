@@ -1,8 +1,45 @@
-const sys = new CellMachine(25, 25, 32, );
+const createBtn = document.getElementById("create");
+const menu = document.getElementById("menu");
+const cellsDiv = document.getElementById("cells");
+const gui = document.getElementById("gui");
+const playBtn = document.getElementById("play");
+const tickBtn = document.getElementById("tick");
 
+/** @param {Element} el */
+function hide(el) {
+    el.classList.add("hidden");
+}
+/** @param {Element} el */
+function show(el) {
+    el.classList.remove("hidden");
+}
 
-sys.addCell(Mover, 0, 1, 0);
-sys.addCell(Rotator, 12, 1, 0);
-sys.addCell(Rotator_CCW, 10, 20, 0);
+const sys = new CellMachine(32, 200, cellsDiv);
 
-setTimeout(sys.gameLoop.bind(sys), 0);
+createBtn.addEventListener("click", e => {
+    hide(menu);
+    sys.createLevel(10, 4);
+
+    sys.rectCell(Mover, 0, 0, 0, 3, 0);
+    sys.addCell(Arrow, 1, 0, 0);
+    sys.addCell(Arrow, 1, 1, 1);
+    sys.addCell(Arrow, 1, 2, 2);
+    sys.addCell(Arrow, 1, 3, 3);
+
+    show(cellsDiv);
+    show(gui);
+});
+playBtn.addEventListener("click", e => {
+    if (sys.running) {
+        sys.pause();
+        playBtn.title = "Play";
+        return;
+    }
+    sys.play();
+    playBtn.title = "Pause";
+});
+tickBtn.addEventListener("click", e => {
+    sys.pause();
+    playBtn.title = "Play";
+    sys.tick();
+});
