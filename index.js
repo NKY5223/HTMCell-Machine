@@ -5,6 +5,20 @@ const gui = document.getElementById("gui");
 const playBtn = document.getElementById("play");
 const tickBtn = document.getElementById("tick");
 
+const cellClasses = {
+    push: Push,
+    mover: Mover,
+    enemy: Enemy,
+    trash: Trash,
+    immobile: Immobile,
+    slide: Slide,
+    rotator: Rotator,
+    rotator_ccw: Rotator_CCW,
+    generator: Generator,
+    orientator: Orientator,
+    arrow: Arrow
+};
+
 /** @param {Element} el */
 function hide(el) {
     el.classList.add("hidden");
