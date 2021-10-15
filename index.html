@@ -4,24 +4,33 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" type="text/css" href="style.css" />
-        <link rel="shortcut icon" href="tex/mover.png" type="image/x-icon">
+        <link rel="shortcut icon" href="./mods/mystic/tex/mover.png" type="image/x-icon">
         <!-- Discord Embed -->
         <meta content="HTMCell Machine" property="og:title">
         <meta content="HTMCell Machine: Cell Machine, in HTML!
 inspired by Jell Machine (still WIP)" property="og:description">
         <meta content="https://www.youtube.com/watch?v=dQw4w9WgXcQ" property="og:url">
-        <meta content="./tex/mover.png" property="og:image">
+        <meta content="./mods/mystic/tex/mover.png" property="og:image">
         <meta content="#2080ff" name="theme-color">
         <title>HTMCell Machine</title>
     </head>
     <body>
-        <div id="menu">
+        <div id="menu" class="flex">
             <div id="logo">
-                <img src="./tex/mover.png" />
+                <img src="./mods/mystic/tex/mover.png" />
                 <h1><span>HTM</span>Cell&nbsp;Machine</h1>
                 <small>inspired by Jell Machine</small>
             </div>
-            <button class="button" id="create" title="Create a new level"><span>Create</span></button>
+            <button class="button" id="createBtn" title="Create a new level"><span>Create</span></button>
+        </div>
+        <div id="createDiv" class="flex hidden">
+            <h1>Create Level</h1>
+            <div>
+                <input type="number" min="0" max="500" id="width" class="input" placeholder="Width" value="100" />
+                <input type="number" min="0" max="500" id="height" class="input" placeholder="Height" value="100" />
+            </div>
+            <br>
+            <button class="button" id="createFinalBtn" title="Create a new level with dimensions"><span>Create</span></button>
         </div>
         <div id="cells" class="hidden"></div>
         <div id="gui" class="hidden">
@@ -46,21 +55,6 @@ inspired by Jell Machine (still WIP)" property="og:description">
             </div>
         </div>
         
-        <script src="cell.js"></script>
-
-        <script src="cells/push.js"></script>
-        <script src="cells/mover.js"></script>
-        <script src="cells/enemy.js"></script>
-        <script src="cells/trash.js"></script>
-        <script src="cells/immobile.js"></script>
-        <script src="cells/slide.js"></script>
-        <script src="cells/rotator.js"></script>
-        <script src="cells/rotator_ccw.js"></script>
-        <script src="cells/generator.js"></script>
-        <script src="cells/orientator.js"></script>
-        <script src="cells/arrow.js"></script>
-
-        <script src="CellMachine.js"></script>
-        <script src="index.js"></script>
+        <script src="index.js" type="module"></script>
     </body>
 </html>

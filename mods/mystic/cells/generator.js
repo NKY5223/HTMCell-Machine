@@ -1,8 +1,9 @@
-class Generator extends Cell {
+import Cell from "../../../cell.js";
+export default class Generator extends Cell {
     constructor(x = 0, y = 0, rot = 0, sys) {
         super(x, y, rot, sys);
-        this.element.classList.add(this.type = "generator");
     }
+    static type = "generator";
     update() {
         let toGen = this.cellAtRot((this.rot + 2) & 3);
         

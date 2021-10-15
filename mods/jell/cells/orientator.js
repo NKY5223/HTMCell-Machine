@@ -1,8 +1,9 @@
-class Orientator extends Cell {
+import Cell from "../../../cell.js";
+export default class Orientator extends Cell {
     constructor(x = 0, y = 0, rot = 0, sys) {
         super(x, y, rot, sys);
-        this.element.classList.add(this.type = "orientator");
     }
+    static type = "orientator";
     update() {
         for (let rot of [0, 1, 2, 3]) {
             let cell = this.cellAtRot(rot);

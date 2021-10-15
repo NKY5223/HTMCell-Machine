@@ -1,4 +1,4 @@
-class CellMachine {
+export default class CellMachine {
     constructor(size = 50, time = 200, el = document.getElementById("cells")) {
         this.w = 1;
         this.h = 1;

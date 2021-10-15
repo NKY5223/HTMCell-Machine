@@ -1,8 +1,9 @@
-class Mover extends Cell {
+import Cell from "../../../cell.js";
+export default class Mover extends Cell {
     constructor(x = 0, y = 0, rot = 0, sys) {
         super(x, y, rot, sys);
-        this.element.classList.add(this.type = "mover");
     }
+    static type = "mover";
     update() {
         let cell = this.cellAtRot(this.rot & 3);
         

@@ -1,4 +1,4 @@
-class Cell {
+export default class Cell {
     /** @param {CellMachine} sys */
     constructor(x = 0, y = 0, rot = 0, sys) {
         this.x = x;
@@ -6,15 +6,16 @@ class Cell {
         this.elRot = this.rot = rot & 3;
         this.sys = sys;
 
-        this.type = "unknown";
-
+        
         this.element = document.createElement("div");
         this.updateEl();
         this.element.classList.add("cell");
+        this.element.classList.add(this.type = this.constructor.type);
     }
+    static type = "unknown";
     update() {
 
-    }
+    }   
     push(rot = 0, force = 1) {
         if (force < 1) return false;
 

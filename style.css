@@ -6,12 +6,14 @@ body {
     margin: 0;
     height: 100%;
     
+    font-family: Consolas;
+    color: #ffffff;
+}
+body, .flex {
     display: flex;
     align-items: center;
     justify-content: center;
-
-    font-family: Consolas;
-    color: #ffffff;
+    flex-direction: column;
 }
 button:focus {
     outline: none;
@@ -20,12 +22,6 @@ button:focus {
     display: none !important;
 }
 
-#menu {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-}
 #logo h1 {
     font-size: 100px;
     line-height: 100px;
@@ -114,6 +110,31 @@ button:focus {
         var(--border) calc(var(--width) - 10px) calc(var(--height) - 10px);
 }
 
+.input {
+    background: none;
+    border: none;
+    border-bottom: 2px solid #ffffff;
+    font: 20px Consolas;
+    color: #ffffff;
+    padding-left: 5px;
+}
+.input:focus {
+    outline: none;
+}
+.input::-webkit-outer-spin-button,
+.input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+.input[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+#width, #height {
+    width: 50px;
+    text-align: center;
+}
+
 #gui {
     z-index: 1;
     width: 100%;
@@ -153,7 +174,7 @@ button:focus {
     height: calc(var(--height) * var(--size));
 
     image-rendering: pixelated;
-    background: url("./tex/BGDefault.png") repeat 0px 0px/var(--size);
+    background: url("./images/bg.png") repeat 0px 0px/var(--size);
 }
 
 .cell {
@@ -167,49 +188,11 @@ button:focus {
     transform: translate(50%, 50%);
     transition: transform var(--time) linear;
     
-    background: url("./tex/unknown.png") 0px / var(--size);
+    background: url("./images/unknown.png") 0px / var(--size);
 
     text-align: center;
     font: calc(var(--size) / 2) Consolas;
     line-height: calc(var(--size) / 2);
     color: white;
     -webkit-text-stroke: 1px #808080;
-}
-
-.notrans {
-    transition: none !important;
-}
-
-.mover {
-    background-image: url("./tex/mover.png");
-}
-.push {
-    background-image: url("./tex/push.png");
-}
-.trash {
-    background-image: url("./tex/trash.png");
-}
-.enemy {
-    background-image: url("./tex/enemy.png");
-}
-.immobile {
-    background-image: url("./tex/immobile.png");
-}
-.slide {
-    background-image: url("./tex/slide.png");
-}
-.rotator {
-    background-image: url("./tex/CWspinner_alt.png");
-}
-.rotator_ccw {
-    background-image: url("./tex/CCWspinner_alt.png");
-}
-.generator {
-    background-image: url("./tex/generator.png");
-}
-.orientator {
-    background-image: url("./tex/orientator.png");
-}
-.arrow {
-    background-image: url("./tex/arrow.png");
 }
