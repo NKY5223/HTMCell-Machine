@@ -92,6 +92,25 @@ tickBtn.addEventListener("click", e => {
     playBtn.title = "Play";
     sys.tick();
 });
+/** @type {Set<string>} */
+const keysDown = new Set();
+document.addEventListener("keydown", e => {
+    keysDown.add(e.code);
+});
+document.addEventListener("keyup", e => {
+    keysDown.delete(e.code);
+});
+
+let camX = 0;
+let camY = 0;
+let scale = 1;
+(function camera() {
+    console.log(camX);
+    camX += keysDown.has("KeyD") - keysDown.has("KeyA");
+    camY += keysDown.has("KeyS") - keysDown.has("KeyW");
+    cellsDiv.style.transform = `scale(${scale}) translate(${-camX}px, ${-camY}px)`;
+    requestAnimationFrame(camera);
+})();
 
 /** @param {Element} el */
 function hide(el) {
