@@ -4,4 +4,5 @@ export default class Push extends Cell {
         super(x, y, rot, sys);
     }
     static type = "push";
+    static texture = "./mods/mystic/tex/push.png";
 }

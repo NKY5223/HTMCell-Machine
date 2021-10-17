@@ -4,6 +4,7 @@ export default class Immobile extends Cell {
         super(x, y, rot, sys);
     }
     static type = "immobile";
+    static texture = "./mods/mystic/tex/immobile.png";
     push() {
         return false;
     }

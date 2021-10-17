@@ -4,6 +4,7 @@ export default class Slide extends Cell {
         super(x, y, rot, sys);
     }
     static type = "slide";
+    static texture = "./mods/mystic/tex/slide.png";
     push(rot = 0, force = 1) {
         if ((rot & 1) !== (this.rot & 1)) return false;
 

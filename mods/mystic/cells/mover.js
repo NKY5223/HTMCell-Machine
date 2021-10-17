@@ -4,6 +4,7 @@ export default class Mover extends Cell {
         super(x, y, rot, sys);
     }
     static type = "mover";
+    static texture = "./mods/mystic/tex/mover.png";
     update() {
         let cell = this.cellAtRot(this.rot & 3);
         

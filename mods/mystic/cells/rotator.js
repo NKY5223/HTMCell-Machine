@@ -4,6 +4,7 @@ export default class Rotator extends Cell {
         super(x, y, rot, sys);
     }
     static type = "rotator";
+    static texture = "./mods/mystic/tex/rotator.png";
     update() {
         for (let rot of [0, 1, 2, 3]) {
             let cell = this.cellAtRot(rot);

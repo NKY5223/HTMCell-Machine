@@ -4,6 +4,7 @@ export default class Trash extends Cell {
         super(x, y, rot, sys);
     }
     static type = "trash";
+    static texture = "./mods/mystic/tex/trash.png";
     push() {
         return null;
     }

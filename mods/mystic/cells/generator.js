@@ -4,6 +4,7 @@ export default class Generator extends Cell {
         super(x, y, rot, sys);
     }
     static type = "generator";
+    static texture = "./mods/mystic/tex/generator.png";
     update() {
         let toGen = this.cellAtRot((this.rot + 2) & 3);
         

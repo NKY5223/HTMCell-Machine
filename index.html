@@ -4,6 +4,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link rel="stylesheet" type="text/css" href="style.css" />
+        <style id="tex"></style>
         <link rel="shortcut icon" href="./mods/mystic/tex/mover.png" type="image/x-icon">
         <!-- Discord Embed -->
         <meta content="HTMCell Machine" property="og:title">
@@ -34,14 +35,8 @@ inspired by Jell Machine (still WIP)" property="og:description">
         </div>
         <div id="cells" class="hidden"></div>
         <div id="gui" class="hidden">
-            <button class="button" id="play" title="Play">
-                <img id="playImg" src="./images/play.png" width="90" height="90" />
-                <img id="pauseImg" src="./images/pause.png" width="90" height="90" />
-            </button>
-            <button class="button" id="tick" title="Run a tick">
-                <img src="./images/tick.png" width="90" height="90" />
-            </button>
-            <div id="hotbar">
+            <div id="vignette"></div>
+            <div id="hotbar" class="flex">
                 <div class="slot" data-slot="1"></div>
                 <div class="slot" data-slot="2"></div>
                 <div class="slot" data-slot="3"></div>
@@ -53,6 +48,13 @@ inspired by Jell Machine (still WIP)" property="og:description">
                 <div class="slot" data-slot="9"></div>
                 <div class="slot" data-slot="10"></div>
             </div>
+            <button class="button" id="play" title="Play">
+                <img id="playImg" src="./images/play.png" width="90" height="90" />
+                <img id="pauseImg" src="./images/pause.png" width="90" height="90" />
+            </button>
+            <button class="button" id="tick" title="Run a tick">
+                <img src="./images/tick.png" width="90" height="90" />
+            </button>
         </div>
         
         <script src="index.js" type="module"></script>

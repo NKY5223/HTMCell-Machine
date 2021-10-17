@@ -13,6 +13,7 @@ export default class Cell {
         this.element.classList.add(this.type = this.constructor.type);
     }
     static type = "unknown";
+    static texture = "./images/unknown.png";
     update() {
 
     }   
