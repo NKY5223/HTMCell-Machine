@@ -140,6 +140,8 @@ button:focus {
     z-index: 1;
     width: 100%;
     height: 100%;
+
+    user-select: none;
 }
 #play {
     position: absolute;
@@ -219,6 +221,8 @@ button:focus {
 
     image-rendering: pixelated;
     background: url("./images/bg.png") repeat 0px 0px/var(--size);
+
+    user-select: none;
 }
 
 .cell {

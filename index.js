@@ -12,8 +12,10 @@ const cellsDiv = document.getElementById("cells");
 const gui = document.getElementById("gui");
 const playBtn = document.getElementById("play");
 const tickBtn = document.getElementById("tick");
-const hotbarEl = Array.from(document.getElementsByClassName("slot"));
 
+/** @type {{el: Element, cell: typeof Cell}[]} */
+const hotbar = Array.from(document.getElementsByClassName("slot")).map(el => ({el, cell: null}));
+/** @type {{[type: string]: typeof Cell}} */
 const cellClasses = {};
 
 let notReady = 0;
@@ -45,14 +47,12 @@ function registerMod(modid) {
 
 ["mystic", "jell"].forEach(registerMod);
 
-/** @type {Array<typeof Cell>} */
-const hotbar = [];
 let onready = setInterval(() => {
     if (notReady) return;
     console.log("ready");
     clearInterval(onready);
 
-    hotbar.push(
+    [
         cellClasses.generator,
         cellClasses.mover,
         cellClasses.rotator,
@@ -60,10 +60,12 @@ let onready = setInterval(() => {
         cellClasses.enemy,
         cellClasses.trash,
         cellClasses.immobile
-    );
-
-    hotbar.forEach((cell, i) => hotbarEl[i].classList.add(cell.type));
+    ].forEach((cell, i) => {
+        hotbar[i].cell = cell;
+        hotbar[i].el.classList.add(cell.type);
+    });
 }, 16);
+
 
 const sys = new CellMachine(32, 200, cellsDiv);
 
@@ -92,6 +94,17 @@ tickBtn.addEventListener("click", e => {
     playBtn.title = "Play";
     sys.tick();
 });
+
+/** @type {Element} */
+let activeSlot = null;
+hotbar.forEach(({el: slot}) => {
+    slot.addEventListener("click", e => {
+        if (activeSlot) activeSlot.classList.remove("selected");
+        slot.classList.add("selected");
+        activeSlot = slot;
+    });
+});
+
 /** @type {Set<string>} */
 const keysDown = new Set();
 document.addEventListener("keydown", e => {
@@ -103,14 +116,31 @@ document.addEventListener("keyup", e => {
 
 let camX = 0;
 let camY = 0;
-let scale = 1;
+let camScale = 1;
+const camSpeed = 5;
+
+document.addEventListener("wheel", e => {
+    if (e.ctrlKey) return;
+
+    let m = 0.9 ** (e.deltaY / 125);
+    let x = (e.pageX - window.innerWidth / 2) / camScale + camX;
+    let y = (e.pageY - window.innerHeight / 2) / camScale + camY;
+
+    camX = (m * x - x + camX) / m;
+    camY = (m * y - y + camY) / m;
+    camScale *= m;
+});
 (function camera() {
-    console.log(camX);
-    camX += keysDown.has("KeyD") - keysDown.has("KeyA");
-    camY += keysDown.has("KeyS") - keysDown.has("KeyW");
-    cellsDiv.style.transform = `scale(${scale}) translate(${-camX}px, ${-camY}px)`;
+    camX += camSpeed * (keysDown.has("KeyD") - keysDown.has("KeyA")) / Math.sqrt(camScale);
+    camY += camSpeed * (keysDown.has("KeyS") - keysDown.has("KeyW")) / Math.sqrt(camScale);
+    cellsDiv.style.transform = `scale(${camScale}) translate(${-camX}px, ${-camY}px)`;
     requestAnimationFrame(camera);
 })();
+
+window.addEventListener("beforeunload", e => {
+    e.preventDefault();
+    return e.returnValue = "Are you sure you want to exit? You might have unsaved work";
+});
 
 /** @param {Element} el */
 function hide(el) {
