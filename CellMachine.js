@@ -46,7 +46,6 @@ export default class CellMachine {
         }
         setTimeout(() => this.ticking = false, this.time);
     }
-    /** @param args Arguments to pass to `type`'s `constructor` */
     addCell(type = Cell, x = 0, y = 0, rot = 0) {
         const cell = new type(x, y, rot, this);
         this.cells.push(cell);

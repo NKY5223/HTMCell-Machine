@@ -12,6 +12,7 @@ const cellsDiv = document.getElementById("cells");
 const gui = document.getElementById("gui");
 const playBtn = document.getElementById("play");
 const tickBtn = document.getElementById("tick");
+const hotbarEl = document.getElementById("hotbar");
 
 /** @type {{el: Element, cell: typeof Cell}[]} */
 const hotbar = Array.from(document.getElementsByClassName("slot")).map(el => ({el, cell: null}));
@@ -74,11 +75,13 @@ createBtn.addEventListener("click", e => {
     hide(menu);
     show(createDiv);
 });
+let inGame = false;
 createFinalBtn.addEventListener("click", e => {
     sys.createLevel(Number(widthInp.value), Number(heightInp.value));
     hide(createDiv);
     show(cellsDiv);
     show(gui);
+    inGame = true;
 });
 playBtn.addEventListener("click", e => {
     if (sys.running) {
@@ -95,14 +98,31 @@ tickBtn.addEventListener("click", e => {
     sys.tick();
 });
 
-/** @type {Element} */
+/** @type {{el: Element, cell: typeof Cell}} */
 let activeSlot = null;
-hotbar.forEach(({el: slot}) => {
-    slot.addEventListener("click", e => {
-        if (activeSlot) activeSlot.classList.remove("selected");
-        slot.classList.add("selected");
+hotbar.forEach(slot => {
+    slot.el.addEventListener("click", e => {
+        if (activeSlot) activeSlot.el.classList.remove("selected");
+        slot.el.classList.add("selected");
         activeSlot = slot;
     });
+});
+
+cellsDiv.addEventListener("mousedown", e => {
+    if (!activeSlot) return;
+    if (!activeSlot.cell) return;
+    let x = Math.floor(((e.pageX - window.innerWidth / 2) / camScale + camX) / 32 + sys.w / 2);
+    let y = Math.floor(((e.pageY - window.innerHeight / 2) / camScale + camY) / 32 + sys.h / 2);
+    sys.cellAt(x, y)?.remove();
+    if (e.button === 0) sys.addCell(activeSlot.cell, x, y, rotate & 3);
+});
+cellsDiv.addEventListener("contextmenu", e => {
+    e.preventDefault();
+});
+let rotate = 0;
+document.addEventListener("keydown", e => {
+    rotate += (e.code === "KeyQ") - (e.code === "KeyE");
+    hotbarEl.style.setProperty("--rotate", rotate);
 });
 
 /** @type {Set<string>} */
@@ -119,8 +139,11 @@ let camY = 0;
 let camScale = 1;
 const camSpeed = 5;
 
-document.addEventListener("wheel", e => {
+document.body.addEventListener("wheel", e => {
     if (e.ctrlKey) return;
+    if (!inGame) return;
+    if (camScale > 10 && e.deltaY < 0) return;
+    if (camScale < 0.01 && e.deltaY > 0) return;
 
     let m = 0.9 ** (e.deltaY / 125);
     let x = (e.pageX - window.innerWidth / 2) / camScale + camX;
@@ -130,6 +153,7 @@ document.addEventListener("wheel", e => {
     camY = (m * y - y + camY) / m;
     camScale *= m;
 });
+gui.addEventListener("wheel", e => e.stopPropagation());
 (function camera() {
     camX += camSpeed * (keysDown.has("KeyD") - keysDown.has("KeyA")) / Math.sqrt(camScale);
     camY += camSpeed * (keysDown.has("KeyS") - keysDown.has("KeyW")) / Math.sqrt(camScale);

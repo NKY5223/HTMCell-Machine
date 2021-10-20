@@ -8,4 +8,5 @@ export default class Immobile extends Cell {
     push() {
         return false;
     }
+    rotate() { }
 }
