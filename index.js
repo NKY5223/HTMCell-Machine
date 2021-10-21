@@ -75,6 +75,9 @@ createBtn.addEventListener("click", e => {
     hide(menu);
     show(createDiv);
 });
+[widthInp, heightInp].forEach(el => el.addEventListener("input", e => {
+    el.value = Math.max(1, Math.floor(Number(el.value)));
+}));
 let inGame = false;
 createFinalBtn.addEventListener("click", e => {
     sys.createLevel(Number(widthInp.value), Number(heightInp.value));

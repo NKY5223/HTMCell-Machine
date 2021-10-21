@@ -233,6 +233,8 @@ button:focus {
     background: url("./images/bg.png") repeat 0px 0px/var(--size);
 
     user-select: none;
+
+    transition: 1s;
 }
 
 .cell {
