@@ -234,7 +234,7 @@ button:focus {
 
     user-select: none;
 
-    transition: 1s;
+    transition: 0.5s ease-out;
 }
 
 .cell {
