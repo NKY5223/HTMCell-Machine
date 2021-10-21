@@ -15,7 +15,7 @@ const tickBtn = document.getElementById("tick");
 const hotbarEl = document.getElementById("hotbar");
 
 /** @type {{el: Element, cell: typeof Cell}[]} */
-const hotbar = Array.from(document.getElementsByClassName("slot")).map(el => ({el, cell: null}));
+const hotbar = Array.from(document.getElementsByClassName("slot")).map(el => ({ el, cell: null }));
 /** @type {{[type: string]: typeof Cell}} */
 const cellClasses = {};
 
@@ -139,8 +139,11 @@ document.addEventListener("keyup", e => {
 
 let camX = 0;
 let camY = 0;
+let targetCamX = 0;
+let targetCamY = 0;
 let camScale = 1;
 const camSpeed = 5;
+const camSpeedCoeff = 0.2;
 
 document.body.addEventListener("wheel", e => {
     if (e.ctrlKey) return;
@@ -152,14 +155,16 @@ document.body.addEventListener("wheel", e => {
     let x = (e.pageX - window.innerWidth / 2) / camScale + camX;
     let y = (e.pageY - window.innerHeight / 2) / camScale + camY;
 
-    camX = (m * x - x + camX) / m;
-    camY = (m * y - y + camY) / m;
+    targetCamX = camX = (m * x - x + camX) / m;
+    targetCamY = camY = (m * y - y + camY) / m;
     camScale *= m;
 });
 gui.addEventListener("wheel", e => e.stopPropagation());
 (function camera() {
-    camX += camSpeed * (keysDown.has("KeyD") - keysDown.has("KeyA")) / Math.sqrt(camScale);
-    camY += camSpeed * (keysDown.has("KeyS") - keysDown.has("KeyW")) / Math.sqrt(camScale);
+    targetCamX += camSpeed * (keysDown.has("KeyD") - keysDown.has("KeyA")) / Math.sqrt(camScale);
+    targetCamY += camSpeed * (keysDown.has("KeyS") - keysDown.has("KeyW")) / Math.sqrt(camScale);
+    camX = (1 - camSpeedCoeff) * camX +  camSpeedCoeff * targetCamX;
+    camY = (1 - camSpeedCoeff) * camY +  camSpeedCoeff * targetCamY;
     cellsDiv.style.transform = `scale(${camScale}) translate(${-camX}px, ${-camY}px)`;
     requestAnimationFrame(camera);
 })();
