@@ -142,8 +142,8 @@ let camY = 0;
 let targetCamX = 0;
 let targetCamY = 0;
 let camScale = 1;
-const camSpeed = 5;
-const camSpeedCoeff = 0.2;
+const camSpeed = 50;
+const camSpeedCoeff = 0.01;
 
 document.body.addEventListener("wheel", e => {
     if (e.ctrlKey) return;
