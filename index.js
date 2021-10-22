@@ -111,7 +111,15 @@ hotbar.forEach(slot => {
     });
 });
 
+let placing = false;
 cellsDiv.addEventListener("mousedown", e => {
+    placing = true;
+});
+cellsDiv.addEventListener("mouseup", e => {
+    placing = false;
+});
+cellsDiv.addEventListener("mousemove", e => {
+    if (!placing) return;
     if (!activeSlot) return;
     if (!activeSlot.cell) return;
     let x = Math.floor(((e.pageX - window.innerWidth / 2) / camScale + camX) / 32 + sys.w / 2);
@@ -142,8 +150,8 @@ let camY = 0;
 let targetCamX = 0;
 let targetCamY = 0;
 let camScale = 1;
-const camSpeed = 50;
-const camSpeedCoeff = 0.01;
+const camSpeed = 5;
+const camSpeedCoeff = 0.1;
 
 document.body.addEventListener("wheel", e => {
     if (e.ctrlKey) return;
