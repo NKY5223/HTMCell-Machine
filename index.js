@@ -111,25 +111,25 @@ hotbar.forEach(slot => {
     });
 });
 
-let placing = false;
+let placing = -1;
+let placeX = 0;
+let placeY = 0;
+let mouseX = 0;
+let mouseY = 0;
 cellsDiv.addEventListener("mousedown", e => {
-    placing = true;
+    placing = e.button;
+    mouseX = e.pageX;
+    mouseY = e.pageY;
+    calcPlacePos();
+    if (activeSlot && activeSlot.cell) placeCell(activeSlot.cell, placeX, placeY, rotate);
 });
-cellsDiv.addEventListener("mouseup", e => {
-    placing = false;
-});
+cellsDiv.addEventListener("mouseup", e => placing = false);
 cellsDiv.addEventListener("mousemove", e => {
-    if (!placing) return;
-    if (!activeSlot) return;
-    if (!activeSlot.cell) return;
-    let x = Math.floor(((e.pageX - window.innerWidth / 2) / camScale + camX) / 32 + sys.w / 2);
-    let y = Math.floor(((e.pageY - window.innerHeight / 2) / camScale + camY) / 32 + sys.h / 2);
-    sys.cellAt(x, y)?.remove();
-    if (e.button === 0) sys.addCell(activeSlot.cell, x, y, rotate & 3);
+    mouseX = e.pageX;
+    mouseY = e.pageY;
+    calcPlacePos();
 });
-cellsDiv.addEventListener("contextmenu", e => {
-    e.preventDefault();
-});
+cellsDiv.addEventListener("contextmenu", e => e.preventDefault());
 let rotate = 0;
 document.addEventListener("keydown", e => {
     rotate += (e.code === "KeyQ") - (e.code === "KeyE");
@@ -151,7 +151,7 @@ let targetCamX = 0;
 let targetCamY = 0;
 let camScale = 1;
 const camSpeed = 5;
-const camSpeedCoeff = 0.1;
+const camSpeedCoeff = 0.2;
 
 document.body.addEventListener("wheel", e => {
     if (e.ctrlKey) return;
@@ -168,14 +168,32 @@ document.body.addEventListener("wheel", e => {
     camScale *= m;
 });
 gui.addEventListener("wheel", e => e.stopPropagation());
-(function camera() {
+(function runsEveryFrame() {
     targetCamX += camSpeed * (keysDown.has("KeyD") - keysDown.has("KeyA")) / Math.sqrt(camScale);
     targetCamY += camSpeed * (keysDown.has("KeyS") - keysDown.has("KeyW")) / Math.sqrt(camScale);
     camX = (1 - camSpeedCoeff) * camX +  camSpeedCoeff * targetCamX;
     camY = (1 - camSpeedCoeff) * camY +  camSpeedCoeff * targetCamY;
+    calcPlacePos();
     cellsDiv.style.transform = `scale(${camScale}) translate(${-camX}px, ${-camY}px)`;
-    requestAnimationFrame(camera);
+    
+    if (placing === 0 && activeSlot && activeSlot.cell) placeCell(activeSlot.cell, placeX, placeY, rotate);
+    else if (placing === 2) removeCell(placeX, placeY);
+
+    requestAnimationFrame(runsEveryFrame);
 })();
+function placeCell(cellType, x = 0, y = 0, rot = 0) {
+    let cell = sys.cellAt(x, y);
+    if (cell && cell.constructor === cellType && cell.rot & 3 === rot & 3) return;
+    removeCell(x, y);
+    sys.addCell(activeSlot.cell, x, y, rot & 3);
+}
+function removeCell(x = 0, y = 0) {
+    sys.cellAt(x, y)?.remove();
+}
+function calcPlacePos(x = mouseX, y = mouseY) {
+    placeX = Math.floor(((x - window.innerWidth / 2) / camScale + camX) / 32 + sys.w / 2);
+    placeY = Math.floor(((y - window.innerHeight / 2) / camScale + camY) / 32 + sys.h / 2);
+}
 
 window.addEventListener("beforeunload", e => {
     e.preventDefault();

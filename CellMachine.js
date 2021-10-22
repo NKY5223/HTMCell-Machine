@@ -7,7 +7,7 @@ export default class CellMachine {
         this.running = true;
         this.ticking = false;
 
-        /** @type {Cell[]} */
+        /** @type {import("./cell.js").default[]} */
         this.cells = [];
         /** @type {[string, 0 | 1 | 2 | 3][]} */
         this.order = [
