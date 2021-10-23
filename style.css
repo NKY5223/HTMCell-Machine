@@ -23,6 +23,9 @@ button:focus {
     display: none !important;
 }
 
+#logo {
+    position: relative;
+}
 #logo h1 {
     font-size: 100px;
     line-height: 100px;
@@ -44,6 +47,26 @@ button:focus {
     display: block;
     width: calc(100% + 10px);
     text-align: right;
+}
+#splash {
+    position: absolute;
+    color: #f0c000;
+    text-shadow: 2px 2px #202020;
+    right: 10px;
+    bottom: 10px;
+    transform: translate(50%, 50%) rotate(-15deg) scale(1);
+    animation: 1s ease-in-out 0s infinite forwards splash;
+}
+@keyframes splash {
+    0% {
+        transform: translate(50%, 50%) rotate(-15deg) scale(1);
+    }
+    50% {
+        transform: translate(50%, 50%) rotate(-15deg) scale(1.5);
+    }
+    100% {
+        transform: translate(50%, 50%) rotate(-15deg) scale(1);
+    }
 }
 
 .button {

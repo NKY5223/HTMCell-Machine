@@ -4,6 +4,7 @@ import Cell from "./cell.js";
 const texStyles = document.getElementById("tex");
 const menu = document.getElementById("menu");
 const createBtn = document.getElementById("createBtn");
+const creditsBtn = document.getElementById("creditsBtn");
 const createDiv = document.getElementById("createDiv");
 const widthInp = document.getElementById("width");
 const heightInp = document.getElementById("height");
@@ -13,6 +14,7 @@ const gui = document.getElementById("gui");
 const playBtn = document.getElementById("play");
 const tickBtn = document.getElementById("tick");
 const hotbarEl = document.getElementById("hotbar");
+const creditsDiv = document.getElementById("credits");
 
 /** @type {{el: Element, cell: typeof Cell}[]} */
 const hotbar = Array.from(document.getElementsByClassName("slot")).map(el => ({ el, cell: null }));
@@ -123,7 +125,7 @@ cellsDiv.addEventListener("mousedown", e => {
     calcPlacePos();
     if (activeSlot && activeSlot.cell) placeCell(activeSlot.cell, placeX, placeY, rotate);
 });
-cellsDiv.addEventListener("mouseup", e => placing = false);
+document.addEventListener("mouseup", e => placing = -1);
 cellsDiv.addEventListener("mousemove", e => {
     mouseX = e.pageX;
     mouseY = e.pageY;
@@ -167,6 +169,9 @@ document.body.addEventListener("wheel", e => {
     targetCamY = camY = (m * y - y + camY) / m;
     camScale *= m;
 });
+window.addEventListener("blur", e => {
+    placing = -1;
+});
 gui.addEventListener("wheel", e => e.stopPropagation());
 (function runsEveryFrame() {
     targetCamX += camSpeed * (keysDown.has("KeyD") - keysDown.has("KeyA")) / Math.sqrt(camScale);
@@ -182,6 +187,7 @@ gui.addEventListener("wheel", e => e.stopPropagation());
     requestAnimationFrame(runsEveryFrame);
 })();
 function placeCell(cellType, x = 0, y = 0, rot = 0) {
+    if (x < 0 || x >= sys.w || y < 0 || x >= sys.h) return;
     let cell = sys.cellAt(x, y);
     if (cell && cell.constructor === cellType && cell.rot & 3 === rot & 3) return;
     removeCell(x, y);
@@ -194,6 +200,11 @@ function calcPlacePos(x = mouseX, y = mouseY) {
     placeX = Math.floor(((x - window.innerWidth / 2) / camScale + camX) / 32 + sys.w / 2);
     placeY = Math.floor(((y - window.innerHeight / 2) / camScale + camY) / 32 + sys.h / 2);
 }
+
+creditsBtn.addEventListener("click", e => {
+    hide(menu);
+    show(creditsDiv);
+});
 
 window.addEventListener("beforeunload", e => {
     e.preventDefault();
