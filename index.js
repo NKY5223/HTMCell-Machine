@@ -92,6 +92,10 @@ createBtn.addEventListener("click", e => {
 }));
 let inGame = false;
 createFinalBtn.addEventListener("click", e => {
+    if (isNaN(widthInp.value) || isNaN(heightInp.value) || widthInp.value === "" || heightInp.value === "") {
+        alert("Fuck off and don't come back until you find natural numbers.");
+        return;
+    }
     sys.createLevel(Number(widthInp.value), Number(heightInp.value));
     hide(createDiv);
     show(cellsDiv);
@@ -230,7 +234,7 @@ creditsBtn.addEventListener("click", e => {
 });
 
 const splashTexts = [
-    `<a href="https://discord.gg/zC63JqbagH" target="_blank">Also check out CMCM!</a>`,
+    `<a href="https://discord.gg/zC63JqbagH" target="_blank">Also check out an asshole!</a>`,
     "-10% original!",
     `<a href="https://discord.gg/4aArDTsPJb" target="_blank">Also check out Jell Machine!</a>`,
     "Filled with Cells!",
