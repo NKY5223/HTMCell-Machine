@@ -129,7 +129,6 @@ document.addEventListener("keydown", e => {
     e.preventDefault();
     hotbar.forEach(slot => {
         if (!slot.currentCell) return;
-        console.log(slot);
         slot.el.classList.remove(slot.currentCell.type);
         slot.currentCell = slot.cells[(slot.cells.indexOf(slot.currentCell) + 1) % slot.cells.length];
         slot.el.classList.add(slot.currentCell.type);
