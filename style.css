@@ -25,6 +25,7 @@ button:focus {
 
 #logo {
     position: relative;
+    user-select: none;
 }
 #logo h1 {
     font-size: 100px;
@@ -62,7 +63,7 @@ button:focus {
         transform: translate(50%, 50%) rotate(-15deg) scale(1);
     }
     50% {
-        transform: translate(50%, 50%) rotate(-15deg) scale(1.5);
+        transform: translate(50%, 50%) rotate(-15deg) scale(1.2);
     }
     100% {
         transform: translate(50%, 50%) rotate(-15deg) scale(1);

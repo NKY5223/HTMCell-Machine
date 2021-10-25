@@ -3,6 +3,7 @@ import Cell from "./cell.js";
 
 const texStyles = document.getElementById("tex");
 const menu = document.getElementById("menu");
+const splash = document.getElementById("splash");
 const createBtn = document.getElementById("createBtn");
 const creditsBtn = document.getElementById("creditsBtn");
 const createDiv = document.getElementById("createDiv");
@@ -16,18 +17,20 @@ const tickBtn = document.getElementById("tick");
 const hotbarEl = document.getElementById("hotbar");
 const creditsDiv = document.getElementById("credits");
 
-/** @type {{el: Element, cell: typeof Cell}[]} */
-const hotbar = Array.from(document.getElementsByClassName("slot")).map(el => ({ el, cell: null }));
+
+/** @typedef {{el: Element, cells: typeof Cell[], currentCell: typeof Cell}} Slot */
+/** @type {Slot[]} */
+const hotbar = Array.from(document.getElementsByClassName("slot")).map(el => ({ el, cells: null, currentCell: null }));
 /** @type {{[type: string]: typeof Cell}} */
 const cellClasses = {};
 
 let notReady = 0;
-function registerMod(modid) {
+function loadMod(modid) {
     notReady++;
 
     /** 
      * @param {Object} module 
-     * @param {Array<typeof Cell>} module.default
+     * @param {typeof Cell[]} module.default
      */
     function handler({ default: mod }) {
         mod.forEach(cell => {
@@ -39,16 +42,21 @@ function registerMod(modid) {
             texStyles.innerHTML += `.${cell.type} {
     background-image: url(${cell.texture});
 }
-`
+`;
+            let img = new Image();
+            img.src = cell.texture;
+            textures.push(img);
         });
         notReady--;
     }
 
     import(`./mods/${modid}/export.js`).then(handler).catch(console.error);
 }
+/** @type {HTMLImageElement[]} */
+const textures = [];
 
 
-["mystic", "jell"].forEach(registerMod);
+["mystic", "jell"].forEach(loadMod);
 
 let onready = setInterval(() => {
     if (notReady) return;
@@ -56,16 +64,17 @@ let onready = setInterval(() => {
     clearInterval(onready);
 
     [
-        cellClasses.generator,
-        cellClasses.mover,
-        cellClasses.rotator,
-        cellClasses.push,
-        cellClasses.enemy,
-        cellClasses.trash,
-        cellClasses.immobile
-    ].forEach((cell, i) => {
-        hotbar[i].cell = cell;
-        hotbar[i].el.classList.add(cell.type);
+        [cellClasses.generator],
+        [cellClasses.mover],
+        [cellClasses.rotator, cellClasses.rotator_ccw, cellClasses.orientator],
+        [cellClasses.push, cellClasses.slide, cellClasses.arrow],
+        [cellClasses.enemy],
+        [cellClasses.trash],
+        [cellClasses.immobile]
+    ].forEach((cells, i) => {
+        hotbar[i].cells = cells;
+        hotbar[i].el.classList.add(cells[0].type);
+        hotbar[i].currentCell = cells[0];
     });
 }, 16);
 
@@ -78,6 +87,7 @@ createBtn.addEventListener("click", e => {
     show(createDiv);
 });
 [widthInp, heightInp].forEach(el => el.addEventListener("input", e => {
+    if (el.value === "") return;
     el.value = Math.max(1, Math.floor(Number(el.value)));
 }));
 let inGame = false;
@@ -103,13 +113,26 @@ tickBtn.addEventListener("click", e => {
     sys.tick();
 });
 
-/** @type {{el: Element, cell: typeof Cell}} */
+/** @type {Slot} */
 let activeSlot = null;
 hotbar.forEach(slot => {
-    slot.el.addEventListener("click", e => {
+    slot.el.addEventListener("mousedown", e => {
         if (activeSlot) activeSlot.el.classList.remove("selected");
         slot.el.classList.add("selected");
         activeSlot = slot;
+    });
+    slot.el.addEventListener("contextmenu", e => e.preventDefault());
+});
+
+document.addEventListener("keydown", e => {
+    if (e.code !== "AltLeft") return;
+    e.preventDefault();
+    hotbar.forEach(slot => {
+        if (!slot.currentCell) return;
+        console.log(slot);
+        slot.el.classList.remove(slot.currentCell.type);
+        slot.currentCell = slot.cells[(slot.cells.indexOf(slot.currentCell) + 1) % slot.cells.length];
+        slot.el.classList.add(slot.currentCell.type);
     });
 });
 
@@ -123,7 +146,7 @@ cellsDiv.addEventListener("mousedown", e => {
     mouseX = e.pageX;
     mouseY = e.pageY;
     calcPlacePos();
-    if (activeSlot && activeSlot.cell) placeCell(activeSlot.cell, placeX, placeY, rotate);
+    if (activeSlot && activeSlot.cells && placing === 0) placeCell(activeSlot.currentCell, placeX, placeY, rotate);
 });
 document.addEventListener("mouseup", e => placing = -1);
 cellsDiv.addEventListener("mousemove", e => {
@@ -171,17 +194,18 @@ document.body.addEventListener("wheel", e => {
 });
 window.addEventListener("blur", e => {
     placing = -1;
+    keysDown.clear();
 });
 gui.addEventListener("wheel", e => e.stopPropagation());
 (function runsEveryFrame() {
     targetCamX += camSpeed * (keysDown.has("KeyD") - keysDown.has("KeyA")) / Math.sqrt(camScale);
     targetCamY += camSpeed * (keysDown.has("KeyS") - keysDown.has("KeyW")) / Math.sqrt(camScale);
-    camX = (1 - camSpeedCoeff) * camX +  camSpeedCoeff * targetCamX;
-    camY = (1 - camSpeedCoeff) * camY +  camSpeedCoeff * targetCamY;
+    camX = (1 - camSpeedCoeff) * camX + camSpeedCoeff * targetCamX;
+    camY = (1 - camSpeedCoeff) * camY + camSpeedCoeff * targetCamY;
     calcPlacePos();
     cellsDiv.style.transform = `scale(${camScale}) translate(${-camX}px, ${-camY}px)`;
-    
-    if (placing === 0 && activeSlot && activeSlot.cell) placeCell(activeSlot.cell, placeX, placeY, rotate);
+
+    if (placing === 0 && activeSlot && activeSlot.cells) placeCell(activeSlot.currentCell, placeX, placeY, rotate);
     else if (placing === 2) removeCell(placeX, placeY);
 
     requestAnimationFrame(runsEveryFrame);
@@ -191,7 +215,7 @@ function placeCell(cellType, x = 0, y = 0, rot = 0) {
     let cell = sys.cellAt(x, y);
     if (cell && cell.constructor === cellType && cell.rot & 3 === rot & 3) return;
     removeCell(x, y);
-    sys.addCell(activeSlot.cell, x, y, rot & 3);
+    sys.addCell(cellType, x, y, rot & 3);
 }
 function removeCell(x = 0, y = 0) {
     sys.cellAt(x, y)?.remove();
@@ -205,6 +229,20 @@ creditsBtn.addEventListener("click", e => {
     hide(menu);
     show(creditsDiv);
 });
+
+const splashTexts = [
+    `<a href="https://discord.gg/zC63JqbagH" target="_blank">Also check out CMCM!</a>`,
+    "-10% original!",
+    `<a href="https://discord.gg/4aArDTsPJb" target="_blank">Also check out Jell Machine!</a>`,
+    "Filled with Cells!",
+    "Easter Eggless",
+    "Written with HTML, CSS, JS!",
+    "Not infected!",
+    "Wash your hands!",
+    "Wear a mask!",
+    "Get the vaccine!"
+];
+splash.innerHTML = splashTexts[Math.floor(Math.random() * splashTexts.length)];
 
 window.addEventListener("beforeunload", e => {
     e.preventDefault();

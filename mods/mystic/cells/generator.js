@@ -9,7 +9,8 @@ export default class Generator extends Cell {
         let toGen = this.cellAtRot((this.rot + 2) & 3);
         
         if (toGen) {
-            let newCell = this.sys.addCell(toGen.constructor, this.x, this.y, toGen.rot);
+            let pushCell = this.sys.cel
+            // let newCell = this.sys.addCell(toGen.constructor, this.x, this.y, toGen.rot);
             if (newCell.push(this.rot, 1) === false) {
                 newCell.remove();
             }

@@ -4,6 +4,7 @@ export default class Orientator extends Cell {
         super(x, y, rot, sys);
     }
     static type = "orientator";
+    static texture = "./mods/jell/tex/orientator.png";
     update() {
         for (let rot of [0, 1, 2, 3]) {
             let cell = this.cellAtRot(rot);

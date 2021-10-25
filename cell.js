@@ -51,9 +51,12 @@ export default class Cell {
 
         return push;
     }
-    cellAtRot(rot = 0) {
+    posAtRot(rot = 0, mag = 1) {
         rot &= 3;
-        return this.sys.cellAt(this.x + (rot === 0) - (rot === 2), this.y + (rot === 3) - (rot === 1));
+        return [this.x + (rot === 0) - (rot === 2), this.y + (rot === 3) - (rot === 1)];
+    }
+    cellAtRot(rot = 0, mag = 1) {
+        return this.sys.cellAt(...this.posAtRot(rot & 3, mag));
     }
     move(rot = this.rot) {
         switch (rot & 3) {

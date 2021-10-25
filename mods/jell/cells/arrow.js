@@ -4,6 +4,7 @@ export default class Arrow extends Cell {
         super(x, y, rot, sys);
     }
     static type = "arrow";
+    static texture = "./mods/jell/tex/arrow.png";
     push(rot = 0, force = 1) {
         if ((rot & 3) !== (this.rot & 3)) return false;
 
