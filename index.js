@@ -234,7 +234,6 @@ creditsBtn.addEventListener("click", e => {
 });
 
 const splashTexts = [
-    `<a href="https://discord.gg/zC63JqbagH" target="_blank">Also check out an asshole!</a>`,
     "-10% original!",
     `<a href="https://discord.gg/4aArDTsPJb" target="_blank">Also check out Jell Machine!</a>`,
     "Filled with Cells!",
