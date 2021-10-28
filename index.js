@@ -93,7 +93,9 @@ createBtn.addEventListener("click", e => {
 let inGame = false;
 createFinalBtn.addEventListener("click", e => {
     if (isNaN(widthInp.value) || isNaN(heightInp.value) || widthInp.value === "" || heightInp.value === "") {
-        alert("Fuck off and don't come back until you find natural numbers.");
+        // alert("Width and height have to be positive integers.");
+        document.body.classList.add("shake");
+        setTimeout(() => document.body.classList.remove("shake"), 100);
         return;
     }
     sys.createLevel(Number(widthInp.value), Number(heightInp.value));
@@ -157,7 +159,7 @@ cellsDiv.addEventListener("mousemove", e => {
     mouseY = e.pageY;
     calcPlacePos();
 });
-cellsDiv.addEventListener("contextmenu", e => e.preventDefault());
+document.addEventListener("contextmenu", e => e.preventDefault());
 let rotate = 0;
 document.addEventListener("keydown", e => {
     rotate += (e.code === "KeyQ") - (e.code === "KeyE");
@@ -201,8 +203,8 @@ window.addEventListener("blur", e => {
 });
 gui.addEventListener("wheel", e => e.stopPropagation());
 (function runsEveryFrame() {
-    targetCamX += camSpeed * (keysDown.has("KeyD") - keysDown.has("KeyA")) / Math.sqrt(camScale);
-    targetCamY += camSpeed * (keysDown.has("KeyS") - keysDown.has("KeyW")) / Math.sqrt(camScale);
+    targetCamX += camSpeed * (keysDown.has("KeyD") - keysDown.has("KeyA")) / camScale;
+    targetCamY += camSpeed * (keysDown.has("KeyS") - keysDown.has("KeyW")) / camScale;
     camX = (1 - camSpeedCoeff) * camX + camSpeedCoeff * targetCamX;
     camY = (1 - camSpeedCoeff) * camY + camSpeedCoeff * targetCamY;
     calcPlacePos();
