@@ -92,7 +92,7 @@ createBtn.addEventListener("click", e => {
 }));
 let inGame = false;
 createFinalBtn.addEventListener("click", e => {
-    if (isNaN(widthInp.value) || isNaN(heightInp.value) || widthInp.value === "" || heightInp.value === "") {
+    if (isNaN(widthInp.value) || isNaN(heightInp.value) || widthInp.value === "" || heightInp.value === "" || Number(widthInp.value) <= 0 || Number(heightInp.value) <= 0) {
         // alert("Width and height have to be positive integers.");
         document.body.classList.add("shake");
         setTimeout(() => document.body.classList.remove("shake"), 100);
